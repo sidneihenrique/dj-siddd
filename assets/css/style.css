@@ -193,11 +193,25 @@ body.loaded .page-loader { transform: translateY(-105%); pointer-events: none; }
 .whatsapp-float svg { width: 27px; height: 27px; fill: currentColor; }
 .whatsapp-float:hover { color: var(--red); background: var(--ink); transform: translateY(-4px) rotate(-8deg); }
 @keyframes whatsapp-pulse { 0% { box-shadow: 0 0 0 0 rgba(156,0,0,.55); } 70%, 100% { box-shadow: 0 0 0 16px rgba(156,0,0,0); } }
+.music-float { position: fixed; z-index: 12; left: 3.2vw; bottom: 52px; display: grid; width: 58px; height: 58px; place-items: center; padding: 0; border: 1px solid var(--red); border-radius: 50%; color: var(--white); background: var(--ink); cursor: pointer; transition: color .25s, background .25s, transform .25s; }
+.music-float svg { width: 24px; height: 24px; }
+.music-float:hover { background: var(--red); transform: translateY(-4px); }
+.music-bars { display: none; align-items: flex-end; gap: 3px; height: 22px; }
+.music-bars i { width: 4px; height: 100%; border-radius: 1px 1px 0 0; background: currentColor; transform-origin: bottom; animation: music-eq-1 .8s ease-in-out infinite; }
+.music-bars i:nth-child(2) { animation-name: music-eq-2; animation-duration: .62s; }
+.music-bars i:nth-child(3) { animation-name: music-eq-3; animation-duration: .94s; }
+.music-bars i:nth-child(4) { animation-name: music-eq-2; animation-duration: .7s; animation-delay: -.35s; }
+.music-float.is-playing .music-bars { display: flex; }
+.music-float.is-playing svg { display: none; }
+@keyframes music-eq-1 { 0%, 100% { transform: scaleY(.3); } 30% { transform: scaleY(1); } 60% { transform: scaleY(.55); } 80% { transform: scaleY(.85); } }
+@keyframes music-eq-2 { 0%, 100% { transform: scaleY(.8); } 25% { transform: scaleY(.25); } 50% { transform: scaleY(.95); } 75% { transform: scaleY(.45); } }
+@keyframes music-eq-3 { 0%, 100% { transform: scaleY(.5); } 20% { transform: scaleY(.9); } 45% { transform: scaleY(.2); } 70% { transform: scaleY(1); } }
 
 @media (max-width: 700px) {
   html { scroll-padding-top: 62px; }
   .whatsapp-float { right: 5vw; bottom: 44px; width: 52px; height: 52px; }
   .whatsapp-float svg { width: 24px; height: 24px; }
+  .music-float { left: 5vw; bottom: 44px; width: 52px; height: 52px; }
   .site-header { height: 62px; padding: 0 5vw; border-bottom-color: rgba(156,0,0,.28); }
   .wordmark img { height: 48px; }
   .menu-toggle { display: flex; width: 42px; height: 42px; flex-direction: column; justify-content: center; gap: 6px; padding: 9px; border: 1px solid rgba(156,0,0,.6); background: transparent; }
@@ -286,6 +300,7 @@ body.loaded .page-loader { transform: translateY(-105%); pointer-events: none; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .page-loader { display: none; }
   .reveal { opacity: 1; transform: none; }
+  .music-float .music-bars i { animation-duration: 1.6s !important; animation-iteration-count: infinite !important; }
 }
 /* Setas em SVG (substituem caracteres de texto) */
 .arr { width: .72em; height: .72em; display: inline-block; vertical-align: -.06em; }

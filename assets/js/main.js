@@ -95,4 +95,57 @@ if (window.matchMedia('(pointer: fine)').matches && cursor) {
   document.addEventListener('pointerleave', () => cursor.classList.remove('is-visible'));
 }
 
+const music = document.querySelector('.site-music');
+const musicToggle = document.querySelector('.music-float');
+if (music && musicToggle) {
+  const unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
+  let userMuted = false;
+  try {
+    userMuted = localStorage.getItem('siddd-music-muted') === 'true';
+  } catch (error) {}
+
+  const saveMuted = (value) => {
+    userMuted = value;
+    try {
+      localStorage.setItem('siddd-music-muted', String(value));
+    } catch (error) {}
+  };
+
+  const updateMusicButton = () => {
+    const isPlaying = !music.paused;
+    musicToggle.classList.toggle('is-playing', isPlaying);
+    musicToggle.setAttribute('aria-pressed', String(isPlaying));
+    musicToggle.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Tocar música');
+  };
+
+  const removeUnlock = () => unlockEvents.forEach((name) => document.removeEventListener(name, unlockMusic));
+
+  const playMusic = () => music.play().then(removeUnlock).catch(() => {});
+
+  // Navegadores bloqueiam som automático: tenta de novo na primeira interação.
+  function unlockMusic(event) {
+    if (musicToggle.contains(event.target) || userMuted) return;
+    playMusic();
+  }
+
+  music.volume = 0.6;
+  music.addEventListener('play', updateMusicButton);
+  music.addEventListener('pause', updateMusicButton);
+
+  musicToggle.addEventListener('click', () => {
+    if (music.paused) {
+      saveMuted(false);
+      playMusic();
+    } else {
+      saveMuted(true);
+      music.pause();
+    }
+  });
+
+  if (!userMuted) {
+    unlockEvents.forEach((name) => document.addEventListener(name, unlockMusic));
+    playMusic();
+  }
+}
+
 window.addEventListener('pagehide', () => window.clearTimeout(wordTimer));
